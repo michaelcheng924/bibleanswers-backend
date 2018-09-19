@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -40,7 +41,7 @@ var Post = mongoose.model("Post", postSchema);
 
 app.use(express.static(path.resolve(__dirname, "../react-ui/build")));
 
-app.get("/api/posts", function(req, res) {
+app.get("/api/posts", cors(), function(req, res) {
   res.set("Content-Type", "application/json");
 
   Post.find({}, (err, posts) => {
