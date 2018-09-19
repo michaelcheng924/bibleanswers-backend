@@ -51,7 +51,7 @@ app.get("/api/posts", cors(), function(req, res) {
 });
 
 app.get("/api/posts/:uid", cors(), function(req, res) {
-  Post.find({ uid: req.params.uid }, (err, post) => {
+  Post.findOne({ uid: req.params.uid }, (err, post) => {
     res.send({
       post
     });
