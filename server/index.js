@@ -15,6 +15,7 @@ const app = express();
 app.use(bodyParser.json());
 
 var postSchema = new mongoose.Schema({
+  uid: String,
   title: String,
   subtitle: String,
   imageUrl: String,
@@ -55,6 +56,12 @@ app.post("/api/posts", function(req, res) {
   const post = new Post(req.body);
   post.save(() => {
     res.send({ post });
+  });
+});
+
+app.delete("/api/post/:id", function(req, res) {
+  Post.deleteOne({ _id: req.params.id }, () => {
+    res.send({ success: true });
   });
 });
 

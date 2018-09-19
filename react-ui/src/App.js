@@ -10,12 +10,16 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this.getPosts();
+  }
+
+  getPosts = () => {
     fetch("/api/posts")
       .then(r => r.json())
       .then(json => {
         this.setState({ posts: json.posts });
       });
-  }
+  };
 
   createPost = event => {
     event.preventDefault();
@@ -26,6 +30,7 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
+        uid: this.uid.value,
         title: this.title.value,
         subtitle: this.subtitle.value,
         imageUrl: this.imageUrl.value,
@@ -35,7 +40,26 @@ class App extends Component {
         added: this.added.value,
         content: this.content.value
       })
-    });
+    })
+      .then(this.getPosts)
+      .then(() =>
+        this.setState({
+          showCreate: false,
+          showPosts: true
+        })
+      );
+  };
+
+  deletePost = () => {
+    const confirm = window.confirm("Are you sure?");
+
+    if (confirm) {
+      fetch(`/api/post/${this.state.post._id}`, {
+        method: "delete"
+      })
+        .then(this.getPosts())
+        .then(() => this.setState({ post: null, showPosts: true }));
+    }
   };
 
   renderPosts() {
@@ -74,6 +98,7 @@ class App extends Component {
     }
 
     const {
+      uid,
       title,
       subtitle,
       imageUrl,
@@ -94,6 +119,7 @@ class App extends Component {
         >
           All Posts
         </button>
+        <div>{uid}</div>
         <div>{title}</div>
         <div>{subtitle}</div>
         <div>{imageUrl}</div>
@@ -103,6 +129,7 @@ class App extends Component {
         <div>{added}</div>
         <div>{updated}</div>
         <div>{content}</div>
+        <button onClick={this.deletePost}>Delete</button>
       </div>
     );
   }
@@ -114,6 +141,9 @@ class App extends Component {
 
     return (
       <form onSubmit={this.createPost}>
+        <div>
+          <input placeholder="UID" ref={uid => (this.uid = uid)} />
+        </div>
         <div>
           <input placeholder="Title" ref={title => (this.title = title)} />
         </div>
