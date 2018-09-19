@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 mongoose.connect(
   process.env.MONGODB_URL || "mongodb://localhost/bibleanswers",
@@ -9,6 +10,8 @@ mongoose.connect(
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
+app.use(bodyParser.json());
 
 var postSchema = new mongoose.Schema({
   title: String,
@@ -35,8 +38,6 @@ var Post = mongoose.model("Post", postSchema);
 //   content: "Hello world"
 // });
 
-// post.save();
-
 app.use(express.static(path.resolve(__dirname, "../react-ui/build")));
 
 app.get("/api/posts", function(req, res) {
@@ -46,6 +47,13 @@ app.get("/api/posts", function(req, res) {
     res.send({
       posts
     });
+  });
+});
+
+app.post("/api/posts", function(req, res) {
+  const post = new Post(req.body);
+  post.save(() => {
+    res.send({ post });
   });
 });
 
