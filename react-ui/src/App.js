@@ -21,6 +21,12 @@ class App extends Component {
       });
   };
 
+  showEdit = () => {
+    this.setState({
+      showEdit: true
+    });
+  };
+
   createPost = event => {
     event.preventDefault();
 
@@ -45,6 +51,36 @@ class App extends Component {
       .then(() =>
         this.setState({
           showCreate: false,
+          showPosts: true
+        })
+      );
+  };
+
+  editPost = event => {
+    event.preventDefault();
+
+    fetch(`/api/posts/${this.state.post._id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        uid: this.uid.value,
+        title: this.title.value,
+        subtitle: this.subtitle.value,
+        imageUrl: this.imageUrl.value,
+        imagePosition: this.imagePosition.value,
+        tags: [this.tag.value],
+        url: this.url.value,
+        added: this.added.value,
+        content: this.content.value
+      })
+    })
+      .then(this.getPosts)
+      .then(() =>
+        this.setState({
+          post: null,
+          showEdit: false,
           showPosts: true
         })
       );
@@ -77,6 +113,7 @@ class App extends Component {
         {this.state.posts.map(post => {
           return (
             <div
+              key={post.uid}
               onClick={() =>
                 this.setState({
                   post,
@@ -93,7 +130,7 @@ class App extends Component {
   }
 
   renderPost() {
-    if (!this.state.post) {
+    if (!this.state.post || this.state.showEdit) {
       return null;
     }
 
@@ -129,6 +166,7 @@ class App extends Component {
         <div>{added}</div>
         <div>{updated}</div>
         <div>{content}</div>
+        <button onClick={this.showEdit}>Edit</button>
         <button onClick={this.deletePost}>Delete</button>
       </div>
     );
@@ -190,12 +228,108 @@ class App extends Component {
     );
   }
 
+  renderEditForm() {
+    if (!this.state.showEdit) {
+      return null;
+    }
+
+    const {
+      uid,
+      title,
+      subtitle,
+      imageUrl,
+      imagePosition,
+      tags,
+      url,
+      added,
+      updated,
+      content
+    } = this.state.post;
+
+    return (
+      <form onSubmit={this.editPost}>
+        <div>
+          <input
+            placeholder="UID"
+            ref={uid => (this.uid = uid)}
+            defaultValue={uid}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="Title"
+            ref={title => (this.title = title)}
+            defaultValue={title}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="Subtitle"
+            ref={subtitle => (this.subtitle = subtitle)}
+            defaultValue={subtitle}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="Image URL"
+            ref={imageUrl => (this.imageUrl = imageUrl)}
+            defaultValue={imageUrl}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="Image Position"
+            ref={imagePosition => (this.imagePosition = imagePosition)}
+            defaultValue={imagePosition}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="URL"
+            ref={url => (this.url = url)}
+            defaultValue={url}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="Added Date"
+            ref={added => (this.added = added)}
+            defaultValue={added}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="Updated Date"
+            ref={updated => (this.updated = updated)}
+            defaultValue={updated}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="Content"
+            ref={content => (this.content = content)}
+            defaultValue={content}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="Tag"
+            ref={tag => (this.tag = tag)}
+            defaultValue={tags[0]}
+          />
+        </div>
+        <button>Edit</button>
+      </form>
+    );
+  }
+
   render() {
     return (
       <div>
         {this.renderPosts()}
         {this.renderPost()}
         {this.renderCreateForm()}
+        {this.renderEditForm()}
       </div>
     );
   }

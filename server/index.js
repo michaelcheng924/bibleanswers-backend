@@ -40,7 +40,7 @@ var Post = mongoose.model("Post", postSchema);
 //   content: "Hello world"
 // });
 
-app.use(express.static(path.resolve(__dirname, "../react-ui/build")));
+app.use(express.static(path.resolve(__dirname, "../react-ui/public")));
 
 app.get("/api/posts", cors(), function(req, res) {
   Post.find({}, (err, posts) => {
@@ -62,6 +62,12 @@ app.post("/api/posts", function(req, res) {
   const post = new Post(req.body);
   post.save(() => {
     res.send({ post });
+  });
+});
+
+app.patch("/api/posts/:id", function(req, res) {
+  Post.update({ _id: req.params.id }, req.body, () => {
+    res.send({ success: true });
   });
 });
 
