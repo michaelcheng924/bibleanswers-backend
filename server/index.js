@@ -41,7 +41,7 @@ var Post = mongoose.model("Post", postSchema);
 //   content: "Hello world"
 // });
 
-app.use(express.static(path.resolve(__dirname, "../react-ui/public")));
+app.use(express.static(path.resolve(__dirname, "../react-ui/build")));
 
 app.get("/api/posts", cors(), function(req, res) {
   Post.find({}, (err, posts) => {
