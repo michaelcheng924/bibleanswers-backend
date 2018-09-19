@@ -4,7 +4,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 mongoose.connect(
-  "mongodb://heroku_xh6ll6gg:t3osessavn6r7dqhjeeis0p810@ds163382.mlab.com:63382/heroku_xh6ll6gg",
+  "mongodb://heroku_xh6ll6gg:t3osessavn6r7dqhjeeis0p810@ds163382.mlab.com:63382/heroku_xh6ll6gg" ||
+    process.env.MONGODB_URI,
   { useNewUrlParser: true }
 );
 
