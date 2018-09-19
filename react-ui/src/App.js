@@ -212,7 +212,10 @@ class App extends Component {
           <input placeholder="Added Date" ref={added => (this.added = added)} />
         </div>
         <div>
-          <input
+          <input placeholder="Tag" ref={tag => (this.tag = tag)} />
+        </div>
+        <div>
+          <textarea
             placeholder="Content"
             ref={content => (this.content = content)}
           />
@@ -221,9 +224,6 @@ class App extends Component {
             placeholder="Updated Date"
             ref={updated => (this.updated = updated)}
           /></div> */}
-        <div>
-          <input placeholder="Tag" ref={tag => (this.tag = tag)} />
-        </div>
         <button>Submit</button>
       </form>
     );
@@ -307,16 +307,16 @@ class App extends Component {
         </div>
         <div>
           <input
-            placeholder="Content"
-            ref={content => (this.content = content)}
-            defaultValue={content}
-          />
-        </div>
-        <div>
-          <input
             placeholder="Tag"
             ref={tag => (this.tag = tag)}
             defaultValue={tags[0]}
+          />
+        </div>
+        <div>
+          <textarea
+            placeholder="Content"
+            ref={content => (this.content = content)}
+            defaultValue={content}
           />
         </div>
         <button>Edit</button>
