@@ -3,7 +3,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 mongoose.connect(
-  process.env.MONGODB_URL || "mongodb://localhost/bibleanswers",
+  process.env.MONGODB_URI || "mongodb://localhost/bibleanswers",
   { useNewUrlParser: true }
 );
 
