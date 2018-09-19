@@ -4,11 +4,11 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/bibleanswers",
+  "mongodb://heroku_xh6ll6gg:t3osessavn6r7dqhjeeis0p810@ds163382.mlab.com:63382/heroku_xh6ll6gg",
   { useNewUrlParser: true }
 );
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 
@@ -43,11 +43,17 @@ var Post = mongoose.model("Post", postSchema);
 app.use(express.static(path.resolve(__dirname, "../react-ui/build")));
 
 app.get("/api/posts", cors(), function(req, res) {
-  res.set("Content-Type", "application/json");
-
   Post.find({}, (err, posts) => {
     res.send({
       posts
+    });
+  });
+});
+
+app.get("/api/posts/:uid", cors(), function(req, res) {
+  Post.find({ uid: req.params.uid }, (err, post) => {
+    res.send({
+      post
     });
   });
 });
