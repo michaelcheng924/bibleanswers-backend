@@ -195,6 +195,7 @@ class App extends Component {
           <input
             placeholder="Image URL"
             ref={imageUrl => (this.imageUrl = imageUrl)}
+            defaultValue="https://bibleanswers-backend.herokuapp.com/images/"
           />
         </div>
         <div>
